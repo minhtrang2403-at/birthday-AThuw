@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday Anh Thư</title>
+  <style>
+    body { background: black; color: white; text-align: center; margin-top: 20vh; font-family: cursive; }
+    h1 { font-size: 3em; color: #ff99ff; }
+    canvas { position: fixed; top: 0; left: 0; }
+  </style>
+</head>
+<body>
+  <h1>🎂 Chúc mừng sinh nhật Anh Thư 🎂</h1>
+  <p>Chúc bạn luôn vui vẻ, hạnh phúc và xinh đẹp 💖</p>
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+  <canvas id="fireworks"></canvas>
+  <script>
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let fireworks = [];
+    function random(min, max) { return Math.random() * (max - min) + min; }
+    function createFirework() {
+      let x = random(100, canvas.width - 100);
+      let y = random(50, canvas.height / 2);
+      for (let i = 0; i < 60; i++) {
+        fireworks.push({ x, y, radius: 2, alpha: 1, angle: random(0, 2 * Math.PI), speed: random(1, 4), color: `hsl(${random(0, 360)},100%,70%)` });
+      }
+    }
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fireworks.forEach((f, i) => {
+        f.x += Math.cos(f.angle) * f.speed;
+        f.y += Math.sin(f.angle) * f.speed + 0.5;
+        f.alpha -= 0.01;
+        ctx.globalAlpha = f.alpha;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = f.color;
+        ctx.fill();
+        if (f.alpha <= 0) fireworks.splice(i, 1);
+      });
+      requestAnimationFrame(animate);
+    }
+    setInterval(createFirework, 700);
+    animate();
+  </script>
+</body>
+</html>
